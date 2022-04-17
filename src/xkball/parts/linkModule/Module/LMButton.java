@@ -41,9 +41,11 @@ public class LMButton extends ModuleButton implements MouseListener {
         this.lm = lm;
         this.setHaveBoard(false);
         this.setOpaque(false);
+        this.setLayout(null);
         label = new JLabel(lm.getTitle());
+        label.setBounds(25,0,this.getWidth()-25,25);
         label.setForeground(IColorSetting.charsColor2);
-        label.setIcon(new ImageIcon(String.valueOf(lm.getIcon())));
+        //label.setIcon(new ImageIcon(String.valueOf(lm.getIcon())));
         label.setFont(new Font("",Font.PLAIN,17));
         menuInitialization();
         //this.setFill(true);
