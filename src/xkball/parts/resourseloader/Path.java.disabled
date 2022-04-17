@@ -1,0 +1,27 @@
+package xkball.parts.resourseloader;
+
+import xkball.MainFrame;
+
+import java.io.File;
+import java.net.URL;
+
+public class Path implements IPath {
+     public static URL url = MainFrame.class.getResource("/");
+     public static File in = new File(url.getFile()).getParentFile();
+     
+     //总目录
+     public static File mainFolder = new File(in.getPath()+File.separator+"xkball");
+     //log
+     public static File logFile = new File(mainFolder.getPath()+File.separator+"log");
+     //LinkModule
+     public static File linkModule = new File(mainFolder.getPath()+File.separator+"linkModule");
+     //图片
+     public static File photos = new File(mainFolder.getPath()+File.separator+"photos");
+     //config
+     public static File config = new File(mainFolder.getPath()+File.separator+"config");
+     
+     public static File getSelfPath(Class aClass){
+          URL url = aClass.getResource("");
+          return new File(url.getFile()).getParentFile();
+     }
+}

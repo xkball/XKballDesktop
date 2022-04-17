@@ -1,0 +1,34 @@
+package xkball.parts.linkModule.Module.disabled;
+
+//import xkball.parts.linkModule.Module.disabled.LMPanel;
+//import xkball.parts.linkModule.Module.disabled.Module;
+import xkball.util.fileUtil.FileUtil;
+
+
+public class partitionPanel extends Module {
+    private int ID;
+    private int y = 0;
+    private LMPanel lmPanel;
+    public partitionPanel(String s, int n, int ID, LMPanel lmPanel){
+        this.lmPanel = lmPanel;
+        this.setLM(false);
+        this.setTitle(s);
+        this.setNumbering(n);
+        this.ID = ID;
+    }
+    
+    @Override
+    public void setNumbering(int numbering){
+        super.setNumbering(numbering);
+        FileUtil.printAtLine(ID+2,lmPanel.getPath(),numbering+" "+this.getTitle());
+    }
+    
+    public int getY() {
+        return y;
+    }
+    
+    public void setY(int y) {
+        this.y = y;
+    }
+}
+

@@ -1,0 +1,63 @@
+package xkball.parts.config;
+
+import javafx.scene.input.KeyCode;
+import xkball.parts.resourseloader.IPath;
+
+import java.io.*;
+import java.util.ArrayList;
+
+
+public class KeyConfig {
+    
+    private final File keyConfigs = new File(IPath.config.getPath()+File.separator+"keyConfig.cfg");
+    public ArrayList<KeyCode> WindowKeyCodes = new ArrayList<>();
+    
+    public static KeyConfig keyConfig = new KeyConfig();
+    
+    private KeyConfig(){
+        if(!keyConfigs.getParentFile().exists()){
+            keyConfigs.getParentFile().mkdirs();
+        }
+        if(!keyConfigs.exists()){
+            try {
+                keyConfigs.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        WindowKeyCodes.clear();
+        getWindowKeyConfig();
+    }
+    
+    
+    public void getWindowKeyConfig(){
+        
+        try {
+            FileReader fr = new FileReader(keyConfigs);
+            BufferedReader bufferedReader = new BufferedReader(fr);
+            boolean b = true;
+            while (b){
+                String s = bufferedReader.readLine();
+                if(s==null){
+                    b = false;
+                }
+                else {
+                    WindowKeyCodes.add(KeyCode.getKeyCode(s));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+    }
+    
+    @Override
+    public String toString(){
+        String result = "windowKeyConfig: ";
+        for(KeyCode keyCode : WindowKeyCodes){
+            result = result+keyCode+" ";
+            
+        }
+        return result;
+    }
+}

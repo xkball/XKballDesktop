@@ -1,0 +1,38 @@
+package xkball.parts.frame;
+
+import xkball.parts.config.KeyConfig;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.AWTEventListener;
+import java.awt.event.KeyEvent;
+
+public class OverAllKeyListener extends JFrame implements AWTEventListener {
+    private boolean[] isPressed = new boolean[KeyConfig.keyConfig.WindowKeyCodes.size()];
+    private boolean needShow = false;
+    private JFrame frame;
+    
+    public OverAllKeyListener(JFrame frame) {
+        this.frame = frame;
+        for (boolean b : isPressed){
+            b = false;
+        }
+        this.setUndecorated(true);
+        this.setSize(10,10);
+        this.setVisible(true);
+        this.setAlwaysOnTop(true);
+    }
+    
+    @Override
+    public void eventDispatched(AWTEvent event) {
+        if(event.getClass() == KeyEvent.class){
+            KeyEvent keyEvent = (KeyEvent) event;
+            
+            
+            //键盘按下
+            if(keyEvent.getID() == KeyEvent.KEY_PRESSED){
+                System.out.println(keyEvent.getKeyCode());
+            }
+        }
+    }
+}

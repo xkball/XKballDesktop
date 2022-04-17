@@ -1,0 +1,183 @@
+package xkball.parts.linkModule.Module.disabled;
+
+import xkball.interfaces.IColorSetting;
+import xkball.parts.linkModule.EditFrame;
+import xkball.parts.resourseloader.IPath;
+import xkball.util.StringUtil;
+import xkball.util.fileUtil.FileUtil;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Objects;
+
+public class LMPanel extends JPanel implements MouseListener {
+    
+    private final JPopupMenu jPopupMenu = new JPopupMenu();
+    private final JMenuItem newPartition = new JMenuItem("新建链接组件");
+    private final JMenuItem newLMButton = new JMenuItem("新建分割组件");
+    private final JMenuItem sort = new JMenuItem("排序组件");
+    
+    private ArrayList<Module> partitionList = new ArrayList<>();
+    private final ArrayList<Module> showList = new ArrayList<>();
+    
+    private final String title;
+    private int part;
+    private File path = new File(IPath.linkModule.getPath()+File.separator+part+File.separator+"panel_"+part+".op");
+    
+    public LMPanel(String title,int part){
+        this.part = part;
+        this.setBackground(IColorSetting.partitionLinesColor2);
+        this.setLayout(null);
+        this.title = title;
+        this.setPreferredSize(new Dimension(310,1000));
+        this.addMouseListener(this);
+        menuInitialization();
+        flushLMs();
+    }
+    
+    public void load(){
+        ArrayList<Module> loadList = new ArrayList<>();
+        //加载分割组件
+        for(int i = 0;
+            i< FileUtil.countLines(path)-1;
+            i++){
+            String sr = FileUtil.readALine(i+2,path);
+            partitionPanel partition = new partitionPanel(sr.substring(sr.indexOf(" ")),
+                    Integer.parseInt(sr.substring(0,sr.indexOf(" "))),
+                    i, this);
+            loadList.add(partition);
+        }
+        //加载链接组件
+        int count = Objects.requireNonNull(new File(IPath.linkModule.getPath() + File.separator + part).listFiles()).length-1;
+        for(int i=0;i<count;i++){
+            loadList.add(LinkedModule.deserialize(i,part));
+        }
+        
+        //按顺序加载  未优化算法
+        showList.clear();
+        for(int i=0;i<countAllModules(part);i++){
+            if(loadList.size()!=0){
+                for (Module module : loadList) {
+                    if (module.getNumbering() == i) {
+                        showList.add(module);
+                    }
+                }
+            }
+            
+        }
+    }
+    
+    public void flushLMs(){
+        load();
+        int lm = 0;
+        int nlm = 0;
+        this.removeAll();
+        for(Module module : showList){
+            if(module.isLM()){
+                LMButton lmButton = new LMButton((LinkedModule) module,part);
+                lmButton.setBounds(8,lm*30+nlm*40+50,300,30);
+                lm++;
+                this.add(lmButton);
+            }
+            if(module instanceof partitionPanel){
+                ((partitionPanel) module).setY(lm*30+nlm*40+50);
+                partitionList.add(module);
+                nlm++;
+            }
+        }
+    }
+    
+    public void menuInitialization(){
+        newLMButton.setBackground(IColorSetting.partitionLinesColor2);
+        newPartition.setBackground(IColorSetting.partitionLinesColor2);
+        sort.setBackground(IColorSetting.partitionLinesColor2);
+        
+        newLMButton.setForeground(IColorSetting.charsColor1);
+        newPartition.setForeground(IColorSetting.charsColor1);
+        sort.setForeground(IColorSetting.charsColor1);
+        
+        newLMButton.addActionListener(e -> {
+            new EditFrame(new LinkedModule(part)).setVisible(true);
+        });
+        
+        jPopupMenu.add(newLMButton);
+        jPopupMenu.add(newPartition);
+        jPopupMenu.add(sort);
+        
+        jPopupMenu.setBackground(IColorSetting.partitionLinesColor2);
+        jPopupMenu.setBorderPainted(false);
+        this.add(jPopupMenu);
+    }
+    
+    public static int countAllModules(int part){
+        int p1 = Objects.requireNonNull(new File(IPath.linkModule.getPath() + File.separator + part).listFiles()).length;
+        int p2 = FileUtil.countLines(new File(IPath.linkModule.getPath()+File.separator+part+File.separator+"panel_"+part+".op"))-1;
+        return p1+p2-1;
+    }
+    
+    @Override
+    public void paint(Graphics g){
+        super.paint(g);
+        Graphics2D g2 = (Graphics2D) g;
+        Shape rec1 = new Rectangle2D.Float(0,0,308,50);
+        g2.setColor(IColorSetting.backgroundColor);
+        g2.fill(rec1);
+        
+        Font font1 = new Font("宋体",Font.BOLD,35);
+        g2.setFont(font1);
+        g2.setColor(IColorSetting.charsColor1);
+        g2.drawString(title,154-StringUtil.getWordX(font1,title)/2,40);
+        
+        g2.setFont(new Font("楷体",Font.PLAIN,20));
+        if (partitionList.size() != 0) {
+            for(Module module : partitionList){
+                if(module != null){
+                    g2.drawString(module.getTitle(),0,((partitionPanel)module).getY());
+                }
+            }
+        }
+        flushLMs();
+    }
+    
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        //frame.repaint();
+    }
+    
+    @Override
+    public void mousePressed(MouseEvent e) {
+    
+    }
+    
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if(e.isMetaDown()){
+            if(e.getY()<50){
+                jPopupMenu.show(e.getComponent(),e.getX(),e.getY());
+            }
+        }
+    }
+    
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    
+    }
+    
+    @Override
+    public void mouseExited(MouseEvent e) {
+    
+    }
+    
+    public ArrayList<Module> getShowList() {
+        return showList;
+    }
+    
+    public File getPath(){
+        return path;
+    }
+}
