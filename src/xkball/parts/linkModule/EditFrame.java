@@ -15,6 +15,8 @@ import xkball.util.fileUtil.ImageUtil;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.IOException;
@@ -70,6 +72,7 @@ public class EditFrame extends JFrame {
         this.place = place;
         this.initialization();
         this.setVisible(true);
+        this.addKeyListener(new QuickSave(this));
         if(m!=null){
             String title = m.getTitle();
             String path = null;
@@ -119,6 +122,10 @@ public class EditFrame extends JFrame {
         chooserInitialization();
         panelInitialization();
         IconChooserInitialization();
+        
+        urlField.addKeyListener(new QuickSave(this));
+        titleField.addKeyListener(new QuickSave(this));
+        fileField.addKeyListener(new QuickSave(this));
     }
     
     //初始化 图标选择面板
@@ -429,6 +436,34 @@ public class EditFrame extends JFrame {
         }
         else {
             t.setBackground(disableColor);
+        }
+    }
+    
+    private static class QuickSave implements KeyListener{
+        private EditFrame ef;
+    
+        public QuickSave(EditFrame e){
+            this.ef = e;
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {
+//            int i = e.getKeyCode();
+//            if(i == KeyEvent.VK_ENTER){
+//                ef.exitOnSave.doClick();
+//            }
+        }
+    
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int i = e.getKeyCode();
+            if(i == KeyEvent.VK_ENTER){
+                ef.exitOnSave.doClick();
+            }
+        }
+    
+        @Override
+        public void keyReleased(KeyEvent e) {
+        
         }
     }
 }

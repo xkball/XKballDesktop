@@ -4,6 +4,7 @@ import xkball.interfaces.IColorSetting;
 import xkball.interfaces.IFlushable;
 import xkball.interfaces.ISettings;
 //import xkball.parts.linkModule.Module.disabled.OutPanel;
+import xkball.parts.SwingParts.PlanPanel;
 import xkball.parts.linkModule.Module.LMMainPanel;
 import xkball.parts.photosModule.PhotosPanel;
 import xkball.parts.resourseloader.IPath;
@@ -26,9 +27,12 @@ public class XkballFrame extends JFrame implements ISettings, IColorSetting, IFl
     //DragFrames dragFrames = new DragFrames(this);
     ShowFrames showFrames = new ShowFrames(this);
     LMMainPanel left;
+    LMMainPanel right;
     
     //OutPanel left = new OutPanel(1,this);
     BackgroundPanel backgroundPanel = new BackgroundPanel();
+    //ClickPanel clickPanel = new ClickPanel();
+    final PlanPanel planPanel = new PlanPanel(IPath.planTexts.getPath());
     
     public XkballFrame(String title)
     {
@@ -38,6 +42,12 @@ public class XkballFrame extends JFrame implements ISettings, IColorSetting, IFl
         }
         else {
             left = new LMMainPanel(IPath.LMLeft.listFiles()[0]);
+        }
+        if(IPath.LMRight.listFiles()==null){
+            right= new LMMainPanel(new File(IPath.LMRight.getPath()+File.separator+"新"));
+        }
+        else {
+            right = new LMMainPanel(IPath.LMRight.listFiles()[0]);
         }
         initialization();
         //this.addMouseListener(new ShowFrames(this,true));
@@ -74,7 +84,7 @@ public class XkballFrame extends JFrame implements ISettings, IColorSetting, IFl
     public void flush() {
         
         this.setSize(750, Toolkit.getDefaultToolkit().getScreenSize().height-50);
-        this.setIconImage(IResources.icon.getImage());
+        this.setIconImage(IResources.largeIcon.getImage());
         this.setLocation((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()-750),0);
         this.setLayout(null);
         this.c.setBackground(backgroundColor);
@@ -128,9 +138,17 @@ public class XkballFrame extends JFrame implements ISettings, IColorSetting, IFl
         left.setPreferredSize(new Dimension(308,this.getHeight()-454-21));
         left.setBounds(30,454,308,this.getHeight()-454-21);
         this.add(left);
+//        clickPanel.setPreferredSize(new Dimension(308,408));
+//        clickPanel.setBounds(375+37,32,308,408);
+//        this.add(clickPanel);
+        planPanel.setPreferredSize(new Dimension(308,408));
+        planPanel.setBounds(375+37,32,308,408);
+        this.add(planPanel);
+        right.setPreferredSize(new Dimension(308,this.getHeight()-454-21));
+        right.setBounds(375+37,454,308,this.getHeight()-454-21);
+        this.add(right);
         this.add(backgroundPanel);
     }
-    
     
     
 }

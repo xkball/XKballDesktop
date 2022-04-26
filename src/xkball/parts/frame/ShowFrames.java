@@ -57,6 +57,7 @@ public class ShowFrames implements WindowFocusListener, KeyListener, MouseListen
     
     @Override
     public void windowLostFocus(WindowEvent e) {
+        frame.planPanel.savePage();
         frame.setVisible(false);
     }
     
@@ -65,6 +66,7 @@ public class ShowFrames implements WindowFocusListener, KeyListener, MouseListen
         if(e.getButton() == MouseEvent.BUTTON1){
             frame.setLocation((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()-750),0);
             frame.left.setNeedReload(true);
+            frame.right.setNeedReload(true);
             frame.setVisible(true);
             //frame.flush();
         }

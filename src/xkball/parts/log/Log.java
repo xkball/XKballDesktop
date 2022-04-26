@@ -40,10 +40,18 @@ public class Log {
     
     public void printException(Exception e){
         StackTraceElement[] messages = e.getStackTrace();
-        for(int i = 0;i<messages.length;i++){
-            print("[error] "+messages[i].toString());
+        //print(e.getCause()+ " "+ e.getLocalizedMessage());
+        printVoidLine();
+        print(e.toString());
+        for (StackTraceElement message : messages) {
+            print("[error] " + message.toString());
         }
-        print(" ");
+        printVoidLine();
+        
+    }
+    
+    public void printVoidLine(){
+        FileUtil.print("",logPath);
     }
     
 }

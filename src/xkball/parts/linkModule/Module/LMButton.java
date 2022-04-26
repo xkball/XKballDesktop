@@ -3,6 +3,7 @@ package xkball.parts.linkModule.Module;
 import xkball.interfaces.IColorSetting;
 import xkball.parts.SwingParts.SelectionPanel;
 import xkball.parts.linkModule.EditFrame;
+import xkball.parts.resourseloader.IResources;
 import xkball.ui.DarkJMenuItemUI;
 import xkball.ui.DarkJMenuUI;
 import xkball.util.DesktopUtil;
@@ -30,6 +31,7 @@ public class LMButton extends ModuleButton implements MouseListener {
     private final JMenu delete = new JMenu("删除");
     
     private JLabel label;
+    private JPanel icon;
 
     
     private final LinkModule lm;
@@ -42,8 +44,38 @@ public class LMButton extends ModuleButton implements MouseListener {
         this.setHaveBoard(false);
         this.setOpaque(false);
         this.setLayout(null);
+        icon = new JPanel(){
+            {
+                this.setBounds(0,0,55,25);
+                this.setFocusable(false);
+                this.setOpaque(false);
+            }
+            @Override
+            public void paint(Graphics g){
+                super.paint(g);
+                Graphics2D g2 = (Graphics2D) g;
+                Image image = Toolkit.getDefaultToolkit().getImage(lm.getIcon().getPath());
+                if(image!= null){
+                    Dimension size = ImageUtil.flushWidthHeight(lm.getIcon(),new Dimension(20,20));
+                    g2.drawImage(image,32,3, (int) size.getWidth(), (int) size.getHeight(),this);
+                }
+                Image image1 =
+                        lm.isFile()?
+                                IResources.getImage(IResources.urlLocalLinkIcon)
+                                :
+                                IResources.getImage(IResources.urlNetLinkIcon);
+                
+                    
+                    Dimension size = ImageUtil.flushWidthHeight(new File(IResources.urlLocalLinkIcon.getFile()),new Dimension(20,20));
+                    g2.drawImage(image1,3,3, (int) size.getWidth(), (int) size.getHeight(),this);
+                
+                g2.setColor(IColorSetting.partitionLinesColor1);
+                Shape rec1 = new Rectangle2D.Float(25,0,3,25);
+                g2.fill(rec1);
+            }
+        };
         label = new JLabel(lm.getTitle());
-        label.setBounds(25,0,this.getWidth()-25,25);
+        label.setBounds(55,0,this.getWidth()-55,25);
         label.setForeground(IColorSetting.charsColor2);
         //label.setIcon(new ImageIcon(String.valueOf(lm.getIcon())));
         label.setFont(new Font("",Font.PLAIN,17));
@@ -58,6 +90,7 @@ public class LMButton extends ModuleButton implements MouseListener {
         this.setBorderColor(new Color(80,80,80));
         this.addMouseListener(this);
         this.add(label);
+        this.add(icon);
     }
     
     @Override

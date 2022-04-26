@@ -3,6 +3,7 @@ package xkball.parts.linkModule.Module;
 import xkball.interfaces.IColorSetting;
 import xkball.parts.SwingParts.VerticalViewPort;
 import xkball.parts.linkModule.EditFrame;
+import xkball.parts.log.Log;
 import xkball.ui.DarkButtonUI;
 import xkball.ui.DarkJMenuItemUI;
 
@@ -123,10 +124,24 @@ public class LMMainPanel extends JPanel {
         ArrayList<Module> bufferA = (ArrayList<Module>) loadList.clone();
         Module[] bufferB = new Module[loadList.size()];
         loadList.clear();
-        for(Module m : bufferA){
-            bufferB[m.getNumbering()] = m;
-            System.out.println(m);
+        try {
+            for(Module m : bufferA){
+                int n = m.getNumbering();
+                //if(n<bufferB.length){
+                bufferB[m.getNumbering()] = m;
+                //System.out.println(m);
+                //}
+        
+            }
         }
+        catch (ArrayIndexOutOfBoundsException e){
+            e.printStackTrace();
+            Log.log.printException(e);
+            Log.log.print("你的模块序号出现了错误，现在已经自动重排");
+            System.out.println("你的模块序号出现了错误，现在已经自动重排");
+            this.enforceResetNumbering();
+        }
+        
         loadList.addAll(Arrays.asList(bufferB));
     }
     
@@ -171,7 +186,8 @@ public class LMMainPanel extends JPanel {
     /**
      * 强制重新排序，于顺序出问题时使用
      * <P>
-     * 目前设计是只能手动调用
+     * //目前设计是只能手动调用
+     * 现在不是了
      */
     public void enforceResetNumbering(){
         loadModules();
@@ -194,7 +210,12 @@ public class LMMainPanel extends JPanel {
             m.serialize(place);
         }
     }
-    
+    public void saveModule(int i){
+        loadList.get(i).serialize(place);
+    }
+    public void saveModule(Module m){
+        m.serialize(place);
+    }
     /**
      * 设置编辑模式
      * <p>
@@ -245,16 +266,22 @@ public class LMMainPanel extends JPanel {
         this.repaint();
     }
     
+    /**
+     * 删除模块
+     * @param numbering 被删除的模块位置
+     */
     public void deleteModule(int numbering){
         for (Module m : loadList){
             if(m.getNumbering() == numbering){
+                System.out.println(m.getFileName(place));
                 m.getFileName(place).delete();
             }
             if(m.getNumbering() > numbering){
                 m.setNumbering(m.getNumbering()-1);
+                this.saveModule(m);
             }
         }
-        this.saveModules();
+        
         this.reload();
     }
     

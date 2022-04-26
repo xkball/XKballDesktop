@@ -140,7 +140,7 @@ public class PhotosPanel extends SelectionPanel implements IFlushable, MouseList
     
     public void paintWord(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
-        Font font = new Font("楷体",Font.BOLD,20);
+        Font font = new Font("楷体",Font.PLAIN,20);
         g2.setFont(font);
         g2.setColor(IColorSetting.charsColor1);
         int ny = this.getHeight()*3/4+y/4;

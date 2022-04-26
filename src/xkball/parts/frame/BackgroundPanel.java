@@ -45,9 +45,9 @@ public class BackgroundPanel extends JPanel implements IColorSetting {
         g2.setColor(partitionLinesColor2);
         //g2.fill(rec1);
         g2.fill(rec2);
-        g2.fill(rec3);
+        //g2.fill(rec3);
         //g2.fill(rec4);
-        g2.fill(rec5);
+        //g2.fill(rec5);
         
         //组件边缘
         Shape line1 = new Line2D.Float(30,31,338,31);

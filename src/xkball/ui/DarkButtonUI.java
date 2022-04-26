@@ -1,6 +1,7 @@
 package xkball.ui;
 
 import sun.swing.SwingUtilities2;
+import xkball.interfaces.IColorSetting;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
@@ -15,6 +16,7 @@ public class DarkButtonUI extends BasicButtonUI {
     public DarkButtonUI(JButton button){
         super();
         this.button=button;
+        button.setForeground(IColorSetting.charsColor1);
     }
     
     @Override
