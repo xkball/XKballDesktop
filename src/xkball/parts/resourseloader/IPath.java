@@ -4,10 +4,11 @@ import xkball.MainFrame;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Objects;
 
 public interface IPath {
-    URL url = MainFrame.class.getResource("/");
-    File in = new File(url.getFile()).getParentFile();
+    URL url = MainFrame.class.getProtectionDomain().getCodeSource().getLocation();
+    File in = new File(Objects.requireNonNull(url).getFile()).getParentFile();
     
     //总目录
     File mainFolder = new File(in.getPath()+File.separator+"xkball");
@@ -25,6 +26,12 @@ public interface IPath {
     File icons = new File(mainFolder.getPath()+File.separator+"icons");
     //计划单
     File planTexts = new File(mainFolder.getPath()+File.separator+"planTexts");
+    
+    //说明文档
+    File init = new File(IResources.getResourceURL("/resource/error.txt").getFile());
+    File error = new File(IResources.getResourceURL("/resource/init.txt").getFile());
+    File initOut = new File(mainFolder.getPath()+File.separator+"init.txt");
+    File errorOut = new File(mainFolder.getPath()+File.separator+"error.txt");
     
     static File getSelfPath(Class aClass){
         URL url = aClass.getResource("");

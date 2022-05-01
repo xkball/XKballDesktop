@@ -1,20 +1,15 @@
 package xkball.parts.linkModule.Module;
 
 import xkball.interfaces.IColorSetting;
-import xkball.parts.SwingParts.SelectionPanel;
 import xkball.parts.linkModule.EditFrame;
 import xkball.ui.DarkJMenuItemUI;
 import xkball.ui.DarkJMenuUI;
-import xkball.util.DesktopUtil;
-import xkball.util.fileUtil.Directory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.io.File;
 
 public class PMButton extends ModuleButton implements MouseListener {
     
@@ -68,7 +63,7 @@ public class PMButton extends ModuleButton implements MouseListener {
         delete.add(doDelete);
         
         edit.addActionListener(e -> {
-            new EditFrame(partModule,PartModule.class.getName(),getPanel().getPlace());
+            new EditFrame(partModule,PartModule.class.getName(),getPanel().getPlace()).setVisible(true);
             getPanel().setNeedReload(true);
         });
         

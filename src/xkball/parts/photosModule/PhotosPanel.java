@@ -1,15 +1,17 @@
 package xkball.parts.photosModule;
 
 import xkball.interfaces.IColorSetting;
-import xkball.parts.SwingParts.SelectionPanel;
+import xkball.parts.log.Log;
+import xkball.parts.resourseloader.IResources;
+import xkball.parts.swingParts.SelectionPanel;
 import xkball.parts.resourseloader.IPath;
+import xkball.util.fileUtil.FileUtil;
 import xkball.util.fileUtil.ImageUtil;
 import xkball.util.exceptions.ContentsNotFoundException;
 import xkball.interfaces.IFlushable;
 import xkball.util.MathUtil;
 import xkball.util.StringUtil;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -44,6 +46,14 @@ public class PhotosPanel extends SelectionPanel implements IFlushable, MouseList
                 e.printStackTrace();
             }
         }
+        if(getPhotosCounts()==0){
+            try {
+                FileUtil.copy("/resource/transparent_icon.png",new File(IPath.photos.getPath()+File.separator+"1.png"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        
         this.initialization();
         this.flush();
         this.addMouseListener(this);
@@ -64,11 +74,12 @@ public class PhotosPanel extends SelectionPanel implements IFlushable, MouseList
         flushPhoto();
         ImageUtil.flushWidthHeight(path,this.getSize());
         this.repaint();
+        Log.log.print("PhotoPanel:刷新了图像");
     }
     
     public void flushPhoto(){
         if (this.getPhotosCounts() >= 1) {
-            numbering = MathUtil.getRandomNumberWithinARange(1, this.getPhotosCounts());
+            numbering = MathUtil.getRandomNumberWithinARange(1, getPhotosCounts());
             File png = new File(IPath.photos.getPath() + File.separator + numbering + ".png");
             File jpg = new File(IPath.photos.getPath() + File.separator + numbering + ".jpg");
             checkImgKind();

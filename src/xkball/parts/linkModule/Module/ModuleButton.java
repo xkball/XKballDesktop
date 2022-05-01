@@ -1,6 +1,6 @@
 package xkball.parts.linkModule.Module;
 
-import xkball.parts.SwingParts.SelectionPanel;
+import xkball.parts.swingParts.SelectionPanel;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;

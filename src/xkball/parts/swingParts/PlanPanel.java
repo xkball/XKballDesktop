@@ -1,7 +1,9 @@
-package xkball.parts.SwingParts;
+package xkball.parts.swingParts;
 
 import xkball.interfaces.IColorSetting;
+import xkball.parts.log.Log;
 import xkball.parts.others.PlanText;
+import xkball.parts.resourseloader.IResources;
 import xkball.ui.DarkButtonUI;
 import xkball.ui.DarkJTextFieldUI;
 
@@ -33,9 +35,9 @@ public class PlanPanel extends JPanel {
     private ClickPanel click5;
     private ClickPanel click6;
     
-    private final JButton nextLeft = new JButton("<-");
-    private final JButton nextRight = new JButton("->");
-    private final JButton returnCenter = new JButton();
+    private final JButton nextLeft = new JButton(IResources.getImageIcon(IResources.urlArrowLeft));
+    private final JButton nextRight = new JButton(IResources.getImageIcon(IResources.urlArrowRight));
+    private final JButton returnCenter = new JButton(IResources.getImageIcon(IResources.urlReturnIcon));
     
     private final JLabel showPage;
     //overallMoveDown
@@ -136,6 +138,10 @@ public class PlanPanel extends JPanel {
         nextRight.setUI(new DarkButtonUI(nextRight));
         returnCenter.setUI(new DarkButtonUI(returnCenter));
         
+        nextLeft.setOpaque(false);
+        nextRight.setOpaque(false);
+        returnCenter.setOpaque(false);
+        
         title.addFocusListener(new SaveModule(this));
         text1.addFocusListener(new SaveModule(this));
         text2.addFocusListener(new SaveModule(this));
@@ -222,6 +228,7 @@ public class PlanPanel extends JPanel {
     public void savePage(){
         this.loadBack();
         nowText.saveTexts(new File(place));
+        Log.log.print("计划面板:保存了页面-"+this.page);
     }
     
     public void loadPage(int i){

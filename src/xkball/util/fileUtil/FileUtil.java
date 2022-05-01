@@ -1,22 +1,38 @@
 package xkball.util.fileUtil;
 
+import xkball.MainFrame;
 import xkball.parts.log.Log;
 import xkball.parts.resourseloader.IPath;
+import xkball.parts.resourseloader.IResources;
 import xkball.util.MathUtil;
 
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class FileUtil {
     //to是文件夹
-    public static boolean copy(File from,File to){
-        if(from.exists()){
+    
+    /**
+     * 简单的复制罢了
+     * @param from 文件地址
+     * @param to 文件粘贴地址，文件夹
+     * @return 复制结果
+     */
+    public static boolean copy(String from,File to) throws FileNotFoundException {
+        return copy(new File(from),to, MainFrame.class.getResourceAsStream(from));
+    }
+    public static boolean copy(File from,File to) throws FileNotFoundException {
+        return copy(from,to,new FileInputStream(from));
+    }
+    public static boolean copy(File from,File to,InputStream InputStream){
+        Log.log.print(from.toString());
+        //if(from.exists()){
             if(!to.getParentFile().exists()){
                 to.getParentFile().mkdirs();
             }
             boolean res = false;
             try {
-                FileInputStream fileInputStream = new FileInputStream(from);
                 File outFile = getCopyFile(from,to);
                 outFile.createNewFile();
                 FileOutputStream fileOutputStream = new FileOutputStream(outFile);
@@ -24,10 +40,10 @@ public class FileUtil {
                 Log.log.print("拷贝到"+to);
                 byte[] data = new byte[1024];
                 int t = 0;
-                while ((t = fileInputStream.read(data)) != -1){
+                while ((t = InputStream.read(data)) != -1){
                     fileOutputStream.write(data,0,t);
                 }
-                fileInputStream.close();
+                InputStream.close();
                 fileOutputStream.close();
                 res = true;
             } catch (IOException e) {
@@ -40,10 +56,10 @@ public class FileUtil {
             }
             return res;
             
-        }
-        else {
-            return false;
-        }
+        //}
+        //else {
+        //    return false;
+        //}
     }
     
     public static String getCopyPath(File from,File to){
@@ -51,24 +67,30 @@ public class FileUtil {
     }
     
     public static File getCopyFile(File from,File to){
-        Directory tod = new Directory(to);
-        return getCopyFile(from,tod);
+        boolean b = to.isDirectory();
+        if(!b){
+            return to;
+        }
+        else {
+            Directory tod = new Directory(to);
+            return getCopyFile(from,tod);
+        }
     }
     
     public static File getCopyFile(File from,Directory to){
-        if(from.exists()){
+        //if(from.exists()){
             String out = from.getPath().substring(from.getPath().lastIndexOf(File.separator));
             return new File(to.getPath()+out);
-        }
-        else {
-            try {
-                throw new FileNotFoundException();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Log.log.printException(e);
-            }
-            return null;
-        }
+        //}
+//        //else {
+//            try {
+//                throw new FileNotFoundException();
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//                Log.log.printException(e);
+//            }
+//            return null;
+//        }
     }
     
     public static File[] getAllFiles(File file){
@@ -123,6 +145,7 @@ public class FileUtil {
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
+            Log.log.printException(e);
         }
     }
     public static void print(String[] strings,File file){
@@ -138,6 +161,7 @@ public class FileUtil {
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
+            Log.log.printException(e);
         }
     }
     
@@ -163,6 +187,7 @@ public class FileUtil {
                 fr.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.log.printException(e);
             }
             return i;
         }
@@ -183,6 +208,7 @@ public class FileUtil {
             fr.close();
         } catch (IOException e) {
             e.printStackTrace();
+            Log.log.printException(e);
         }
         return sr;
     }
@@ -205,6 +231,7 @@ public class FileUtil {
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
+            Log.log.printException(e);
         }
     }
     

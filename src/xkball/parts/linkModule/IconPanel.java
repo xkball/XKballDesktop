@@ -1,6 +1,7 @@
 package xkball.parts.linkModule;
 
 import xkball.interfaces.IColorSetting;
+import xkball.parts.resourseloader.IPath;
 import xkball.parts.resourseloader.IResources;
 import xkball.util.fileUtil.ImageUtil;
 
@@ -18,7 +19,7 @@ public class IconPanel extends JPanel implements MouseListener {
     private IconChoosePanel iconChoosePanel;
     
     public IconPanel(){
-        this(new File(IResources.urlIcon.getFile()));
+        this(new File(IPath.icons.getPath()+File.separator+"icon.png"));
     }
     public IconPanel(File iconFile) {
         this.iconFile = iconFile;

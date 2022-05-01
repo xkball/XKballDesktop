@@ -1,4 +1,4 @@
-package xkball.parts.SwingParts;
+package xkball.parts.swingParts;
 
 import xkball.interfaces.IColorSetting;
 

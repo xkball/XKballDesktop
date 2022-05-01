@@ -1,21 +1,18 @@
 package xkball.parts.linkModule;
 
 import xkball.interfaces.IColorSetting;
-import xkball.parts.SwingParts.VerticalViewPort;
+import xkball.parts.log.Log;
+import xkball.parts.swingParts.VerticalViewPort;
 import xkball.parts.resourseloader.IPath;
 import xkball.parts.resourseloader.IResources;
 import xkball.util.fileUtil.FileUtil;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static java.awt.event.MouseWheelEvent.WHEEL_UNIT_SCROLL;
 
 public class IconChoosePanel extends VerticalViewPort {
     
@@ -69,19 +66,36 @@ public class IconChoosePanel extends VerticalViewPort {
         
         loadResourcesIcon();
         loadIcons();
-        this.addMouseWheelListener(this);
-        this.setScrollMode(SIMPLE_SCROLL_MODE);
+//        this.addMouseWheelListener(this);
+//        this.setScrollMode(SIMPLE_SCROLL_MODE);
     }
     
     public void loadResourcesIcon(){
-        File icon = new File(IResources.urlIcon.getFile());
-        File filesIcon = new File(IResources.urlFileIcon.getFile());
-        if(!FileUtil.getCopyFile(icon,icons).exists()){
-            FileUtil.copy(icon,icons);
+        String[] needs = new String[]{
+                "/resource/icon.png",
+                "/resource/filesIcon.png",
+                "/resource/local_link_icon.png",
+                "/resource/net_link_icon.png",
+                "/resource/icon_large.png",
+                "/resource/transparent_icon.png",
+                "/resource/arrow_right.png",
+                "/resource/arrow_left.png",
+                "/resource/prong.png",
+                "/resource/hook.png"
+        };
+        for(String f : needs){
+            
+            if(!FileUtil.getCopyFile(new File(IResources.getResourceURL(f).getFile()),icons).exists()){
+                try {
+                    FileUtil.copy(f,icons);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    Log.log.printException(e);
+                }
+            }
+            
         }
-        if(!FileUtil.getCopyFile(filesIcon,icons).exists()){
-            FileUtil.copy(filesIcon,icons);
-        }
+        
     }
     
     public void enableIconChoosePanel(JComponent... jComponent){

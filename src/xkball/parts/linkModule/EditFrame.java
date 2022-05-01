@@ -25,6 +25,8 @@ import java.util.Objects;
 
 public class EditFrame extends JFrame {
     
+    private static boolean isWorking = false;
+    
     private final Module m;
     private String type;
     private File place;
@@ -70,8 +72,12 @@ public class EditFrame extends JFrame {
         this.m = m;
         this.type = type;
         this.place = place;
+        if(EditFrame.isWorking){
+            this.dispose();
+            return;
+        }
         this.initialization();
-        this.setVisible(true);
+        //this.setVisible(true);
         this.addKeyListener(new QuickSave(this));
         if(m!=null){
             String title = m.getTitle();
@@ -101,6 +107,9 @@ public class EditFrame extends JFrame {
                 urlField.setEnabled(!b);
             }
         }
+        
+        this.setAutoRequestFocus(true);
+        this.repaint();
     }
     
     public void initialization(){
@@ -111,7 +120,7 @@ public class EditFrame extends JFrame {
         this.setLocation((int)(x-this.getSize().getWidth()/2),(int)(y-this.getSize().getHeight()/2));
         this.setLayout(null);
         this.getContentPane().setBackground(IColorSetting.backgroundColor);
-        this.setIconImage(IResources.icon.getImage());
+        this.setIconImage(IResources.getImage(IResources.urlTransparentIcon));
         this.addMouseListener(dragFrames);
         this.addMouseMotionListener(dragFrames);
         
@@ -126,6 +135,8 @@ public class EditFrame extends JFrame {
         urlField.addKeyListener(new QuickSave(this));
         titleField.addKeyListener(new QuickSave(this));
         fileField.addKeyListener(new QuickSave(this));
+        EditFrame.isWorking = true;
+        this.repaint();
     }
     
     //初始化 图标选择面板
@@ -437,6 +448,12 @@ public class EditFrame extends JFrame {
         else {
             t.setBackground(disableColor);
         }
+    }
+    
+    @Override
+    public void dispose(){
+        EditFrame.isWorking = false;
+        super.dispose();
     }
     
     private static class QuickSave implements KeyListener{

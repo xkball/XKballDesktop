@@ -1,7 +1,6 @@
 package xkball.parts.linkModule.Module;
 
 import xkball.interfaces.IColorSetting;
-import xkball.parts.SwingParts.SelectionPanel;
 import xkball.parts.linkModule.EditFrame;
 import xkball.parts.resourseloader.IResources;
 import xkball.ui.DarkJMenuItemUI;
@@ -11,7 +10,6 @@ import xkball.util.fileUtil.Directory;
 import xkball.util.fileUtil.ImageUtil;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicMenuItemUI;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -142,7 +140,7 @@ public class LMButton extends ModuleButton implements MouseListener {
         });
         
         edit.addActionListener(e -> {
-            new EditFrame(lm,LinkModule.class.getName(),getPanel().getPlace());
+            new EditFrame(lm,LinkModule.class.getName(),getPanel().getPlace()).setVisible(true);
             getPanel().setNeedReload(true);
         });
         

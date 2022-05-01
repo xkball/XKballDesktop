@@ -1,7 +1,5 @@
-package xkball.parts.SwingParts;
+package xkball.parts.swingParts;
 
-import com.sun.deploy.panel.GeneralPanel;
-import javafx.fxml.JavaFXBuilderFactory;
 import xkball.interfaces.IColorSetting;
 import xkball.parts.resourseloader.IResources;
 
@@ -9,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 public class ClickPanel extends JPanel  {
@@ -89,7 +86,7 @@ public class ClickPanel extends JPanel  {
         this.repaint();
     }
     
-    private class ChangeState implements MouseListener{
+    private static class ChangeState implements MouseListener{
         private ClickPanel clickPanel;
         
         public ChangeState(ClickPanel clickPanel){

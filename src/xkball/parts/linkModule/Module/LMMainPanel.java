@@ -1,7 +1,7 @@
 package xkball.parts.linkModule.Module;
 
 import xkball.interfaces.IColorSetting;
-import xkball.parts.SwingParts.VerticalViewPort;
+import xkball.parts.swingParts.VerticalViewPort;
 import xkball.parts.linkModule.EditFrame;
 import xkball.parts.log.Log;
 import xkball.ui.DarkButtonUI;
@@ -46,7 +46,7 @@ public class LMMainPanel extends JPanel {
             place.mkdirs();
         }
         this.titleS = place.getName();
-        innerScrollPane = new VerticalViewPort(20,innerPanel);
+        innerScrollPane = new VerticalViewPort(20,innerPanel,0);
         this.menuInitialization();
         title  = new JLabel(titleS){
             {
@@ -171,6 +171,9 @@ public class LMMainPanel extends JPanel {
                 loadButton.add(pm);
             }
         }
+        if(y>innerPanel.getHeight()){
+            innerPanel.setPreferredSize(new Dimension(innerPanel.getWidth(),y));
+        }
     }
     
     /**
@@ -181,6 +184,7 @@ public class LMMainPanel extends JPanel {
         this.sortModules();
         this.loadModuleButtons();
         this.repaint();
+        Log.log.print(this.place.getName()+":刷新了面板");
     }
     
     /**
@@ -198,6 +202,7 @@ public class LMMainPanel extends JPanel {
                 var=var+1;
             }
         }
+        Log.log.print(this.place.getName()+":强制重载了模块顺序");
         this.saveModules();
         this.reload();
     }
@@ -209,12 +214,15 @@ public class LMMainPanel extends JPanel {
         for(Module m : loadList){
             m.serialize(place);
         }
+        Log.log.print(this.place.getName()+":保存了模块");
     }
     public void saveModule(int i){
         loadList.get(i).serialize(place);
+        Log.log.print(this.place.getName()+":保存了模块");
     }
     public void saveModule(Module m){
         m.serialize(place);
+        Log.log.print(this.place.getName()+":保存了模块");
     }
     /**
      * 设置编辑模式
@@ -231,6 +239,7 @@ public class LMMainPanel extends JPanel {
         sort.setEnabled(!b);
         enforceResetNumberingButton.setEnabled(!b);
         refresh.setEnabled(!b);
+        Log.log.print(this.place.getName()+":模块编辑模式-"+b);
     }
     
     /**
@@ -271,9 +280,11 @@ public class LMMainPanel extends JPanel {
      * @param numbering 被删除的模块位置
      */
     public void deleteModule(int numbering){
+        String s = null;
         for (Module m : loadList){
             if(m.getNumbering() == numbering){
                 System.out.println(m.getFileName(place));
+                s = String.valueOf(m.getFileName(place));
                 m.getFileName(place).delete();
             }
             if(m.getNumbering() > numbering){
@@ -281,7 +292,7 @@ public class LMMainPanel extends JPanel {
                 this.saveModule(m);
             }
         }
-        
+        Log.log.print(this.place.getName()+":删除了模块"+s);
         this.reload();
     }
     
@@ -310,19 +321,26 @@ public class LMMainPanel extends JPanel {
         title.setFont(new Font("",Font.BOLD,30));
         title.setOpaque(false);
         this.add(title);
-    
-        innerPanel.setMinimumSize(new Dimension(308,506));
-        innerPanel.setOpaque(false);
-        innerPanel.setLayout(null);
-        innerPanel.setFocusable(false);
+        
+        //innerPanel.setFocusable(false);
 //        innerPanel.setBackground(IColorSetting.partitionLinesColor3);
-    
+        
+        innerScrollPane.setOpaque(false);
+       
+//        innerScrollPane.addMouseWheelListener(innerScrollPane);
+//        innerScrollPane.setScrollMode(SIMPLE_SCROLL_MODE);
+        //innerScrollPane.setFocusable(false);
+        this.add(innerScrollPane);
+        innerScrollPane.setBounds(0,51,308,506);
+        innerScrollPane.setView(innerPanel);
         innerScrollPane.setViewSize(new Dimension(308,506));
         innerScrollPane.setViewPosition(new Point(0,0));
-        innerScrollPane.setOpaque(false);
+        innerPanel.setLayout(null);
+        innerPanel.setMinimumSize(new Dimension(308,506));
+        innerPanel.setOpaque(false);
         innerScrollPane.setBounds(0,51,308,506);
-        innerScrollPane.setFocusable(false);
-        this.add(innerScrollPane);
+        //innerScrollPane.setView(innerPanel);
+        //this.addMouseWheelListener(new VerticalViewPort.WheelView(innerScrollPane,506));
     }
     
     public void menuInitialization(){
@@ -340,11 +358,11 @@ public class LMMainPanel extends JPanel {
         refresh.setUI(new DarkJMenuItemUI());
         
         newLMButton.addActionListener(e -> {
-            new EditFrame(LinkModule.class.getName(),place);
+            new EditFrame(LinkModule.class.getName(),place).setVisible(true);
             this.setNeedReload(true);
         });
         newPMButton.addActionListener(e -> {
-            new EditFrame(PartModule.class.getName(),place);
+            new EditFrame(PartModule.class.getName(),place).setVisible(true);
             this.setNeedReload(true);
         });
         enforceResetNumberingButton.addActionListener(e -> {

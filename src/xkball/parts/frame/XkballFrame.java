@@ -4,7 +4,7 @@ import xkball.interfaces.IColorSetting;
 import xkball.interfaces.IFlushable;
 import xkball.interfaces.ISettings;
 //import xkball.parts.linkModule.Module.disabled.OutPanel;
-import xkball.parts.SwingParts.PlanPanel;
+import xkball.parts.swingParts.PlanPanel;
 import xkball.parts.linkModule.Module.LMMainPanel;
 import xkball.parts.photosModule.PhotosPanel;
 import xkball.parts.resourseloader.IPath;
@@ -13,6 +13,7 @@ import xkball.parts.resourseloader.IResources;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.Objects;
 
 public class XkballFrame extends JFrame implements ISettings, IColorSetting, IFlushable {
     
@@ -38,16 +39,16 @@ public class XkballFrame extends JFrame implements ISettings, IColorSetting, IFl
     {
         super(title);
         if(IPath.LMLeft.listFiles()==null){
-            left = new LMMainPanel(new File(IPath.LMLeft.getPath()+File.separator+"新"));
+            left = new LMMainPanel(new File(IPath.LMLeft.getPath()+File.separator+"左"));
         }
         else {
-            left = new LMMainPanel(IPath.LMLeft.listFiles()[0]);
+            left = new LMMainPanel(Objects.requireNonNull(IPath.LMLeft.listFiles())[0]);
         }
         if(IPath.LMRight.listFiles()==null){
-            right= new LMMainPanel(new File(IPath.LMRight.getPath()+File.separator+"新"));
+            right= new LMMainPanel(new File(IPath.LMRight.getPath()+File.separator+"右"));
         }
         else {
-            right = new LMMainPanel(IPath.LMRight.listFiles()[0]);
+            right = new LMMainPanel(Objects.requireNonNull(IPath.LMRight.listFiles())[0]);
         }
         initialization();
         //this.addMouseListener(new ShowFrames(this,true));
@@ -84,7 +85,7 @@ public class XkballFrame extends JFrame implements ISettings, IColorSetting, IFl
     public void flush() {
         
         this.setSize(750, Toolkit.getDefaultToolkit().getScreenSize().height-50);
-        this.setIconImage(IResources.largeIcon.getImage());
+        this.setIconImage(IResources.getImage(IResources.urlTransparentIcon));
         this.setLocation((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()-750),0);
         this.setLayout(null);
         this.c.setBackground(backgroundColor);
