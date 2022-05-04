@@ -9,6 +9,7 @@ import xkball.parts.linkModule.Module.LMMainPanel;
 import xkball.parts.photosModule.PhotosPanel;
 import xkball.parts.resourseloader.IPath;
 import xkball.parts.resourseloader.IResources;
+import xkball.util.DesktopUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,11 +62,17 @@ public class XkballFrame extends JFrame implements ISettings, IColorSetting, IFl
             MenuItem item1 = new MenuItem("exit");
             MenuItem item2 = new MenuItem("flush");
             MenuItem item3 = new MenuItem("open");
+            MenuItem item4 = new MenuItem("openFile");
+            MenuItem item5 = new MenuItem("openStartMenu");
             item1.addActionListener(e -> System.exit(0));
             item3.addActionListener(e -> {
                 this.setVisible(true);
                 left.setNeedReload(true);
             });
+            item4.addActionListener(e -> DesktopUtil.openFile(IPath.mainFolder));
+            item5.addActionListener(e -> DesktopUtil.openFile(IPath.start));
+            popupMenu.add(item4);
+            popupMenu.add(item5);
             popupMenu.add(item3);
             popupMenu.add(item2);
             popupMenu.add(item1);
