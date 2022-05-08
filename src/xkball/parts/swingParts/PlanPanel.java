@@ -88,7 +88,7 @@ public class PlanPanel extends JPanel {
     
     public void init(){
         this.removeAll();
-        title.setBounds(104,25,100,40);
+        title.setBounds(79,25,150,40);
         
         //line1
         click1 = new ClickPanel(20,75+y,30,30);

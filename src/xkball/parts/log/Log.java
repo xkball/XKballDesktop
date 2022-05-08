@@ -3,15 +3,13 @@ package xkball.parts.log;
 import xkball.parts.resourseloader.IPath;
 import xkball.util.fileUtil.FileUtil;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
 public class Log {
     public static Log log = new Log();
-    private File logPath;
+    private final File logPath;
     private Log(){
         logPath = new File(IPath.logFile.getPath()+File.separator+"log.txt");
         if(!logPath.getParentFile().exists()){

@@ -7,10 +7,16 @@ import xkball.util.fileUtil.FileUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Objects;
 
 public interface IResources {
+    
+    String SIcon = "/resource/icon.png";
+    String SLocalLinkIcon = "/resource/local_link_icon.png";
+    
     URL urlIcon = getResourceURL("/resource/icon.png");
     ImageIcon icon = new ImageIcon(urlIcon);
     
@@ -69,5 +75,27 @@ public interface IResources {
     static boolean isStartupFromJar() {
         String protocol = MainFrame.class.getResource("").getProtocol();
         return Objects.equals(protocol, "jar");
+    }
+    
+    static File getFile(String s){
+       if(!IPath.resource.exists()){
+           IPath.resource.mkdirs();
+       }
+       if(isStartupFromJar()){
+           try {
+               File f = FileUtil.getCopyFile(new File(s),IPath.resource);
+               if(!f.exists()){
+                   FileUtil.copy(s,IPath.resource);
+               }
+               return FileUtil.getCopyFile(new File(s),IPath.resource);
+           } catch (FileNotFoundException e) {
+               e.printStackTrace();
+               Log.log.printException(e);
+               return null;
+           }
+       }
+       else {
+           return new File(getResourceURL(s).getFile());
+       }
     }
 }

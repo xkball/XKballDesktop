@@ -18,7 +18,7 @@ public class LinkedModule extends Module implements Serializable {
     private URL url = IPath.url;                                 //原始值仅仅是为了防错
     private File file = IPath.getSelfPath(this.getClass());      //不能使用
     private boolean isFile;
-    private File icon = new File(IResources.urlIcon.getFile());
+    private File icon = IResources.getFile(IResources.SIcon);
     private int part;
     
     public LinkedModule(int part){

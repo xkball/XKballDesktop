@@ -32,13 +32,17 @@ public class MainFrame {
                 FileUtil.copy("/resource/error.txt", IPath.mainFolder);
                 FileUtil.copy("/resource/init.txt", IPath.mainFolder);
                 
-                DesktopUtil.openFile(new File(System.getProperty("user.home") +
-                        "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\"));
+                DesktopUtil.openFile(IPath.start);
                 DesktopUtil.openFile(IPath.initOut);
             }
+            if(!IPath.resource.isHidden()){
+                String string=" attrib +h "+IPath.resource.getAbsolutePath();
+                Runtime.getRuntime().exec(string);
+            }
+            //throw new RuntimeException("哎就是玩");
             XkballFrame e = new XkballFrame("桌面小程序");
             e.setVisible(true);
-            //throw new RuntimeException("哎就是玩");
+            
         } catch (Exception e){
             e.printStackTrace();
             Log.log.printException(e);

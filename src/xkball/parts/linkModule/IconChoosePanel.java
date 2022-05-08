@@ -104,7 +104,7 @@ public class IconChoosePanel extends VerticalViewPort {
             components.add(component);
         }
         if(iconPanel == null){
-            iconPanel = new IconPanel(new File(IResources.urlIcon.getFile()));
+            iconPanel = new IconPanel(IResources.getFile(IResources.SIcon));
         }
         chooseIconPath = iconPanel.getIconFile();
         this.loadIcons();

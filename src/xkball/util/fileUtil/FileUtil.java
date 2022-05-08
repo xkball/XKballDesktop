@@ -26,7 +26,7 @@ public class FileUtil {
         return copy(from,to,new FileInputStream(from));
     }
     public static boolean copy(File from,File to,InputStream InputStream){
-        Log.log.print(from.toString());
+        //Log.log.print(from.toString());
         //if(from.exists()){
             if(!to.getParentFile().exists()){
                 to.getParentFile().mkdirs();

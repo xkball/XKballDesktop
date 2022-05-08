@@ -64,7 +64,7 @@ public class LMButton extends ModuleButton implements MouseListener {
                                 IResources.getImage(IResources.urlNetLinkIcon);
                 
                     
-                    Dimension size = ImageUtil.flushWidthHeight(new File(IResources.urlLocalLinkIcon.getFile()),new Dimension(20,20));
+                    Dimension size = ImageUtil.flushWidthHeight(IResources.getFile(IResources.SLocalLinkIcon),new Dimension(20,20));
                     g2.drawImage(image1,3,3, (int) size.getWidth(), (int) size.getHeight(),this);
                 
                 g2.setColor(IColorSetting.partitionLinesColor1);

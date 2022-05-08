@@ -22,6 +22,7 @@ public class ImageUtil {
             image = ImageIO.read(new FileInputStream(path));
         } catch (IOException e) {
             e.printStackTrace();
+            Log.log.printException(e);
         }
         int tx = image.getWidth();
         int ty = image.getHeight();
@@ -90,6 +91,7 @@ public class ImageUtil {
             ImageIO.write(bufferedImage, "png", to);
         } catch (IOException e) {
             e.printStackTrace();
+            Log.log.printException(e);
         }
         g2d.dispose();
     }
